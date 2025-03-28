@@ -1,0 +1,10 @@
+.sliderbg{
+    background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(240,113,39,0) 10%, rgba(240,113,39,0) 90%, rgba(255,255,255,1) 100%);
+    position: absolute;
+    top:0;
+    left:0;
+    height: 100%;
+    width:100%;
+    z-index:1;
+    border-radius:10px;
+}
