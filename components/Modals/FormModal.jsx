@@ -98,7 +98,6 @@ const FormModal = ({ isOpen, onClose }) => {
       Email: values.Email,
       Adresse: values.Adresse,
       'Numéro de téléphone': values['Numéro de téléphone'],
-      firstSelect: values.firstSelect,
       secondSelect: values.secondSelect,
       courseType: values.courseType,
     };
@@ -107,7 +106,7 @@ const FormModal = ({ isOpen, onClose }) => {
     console.log("Données à envoyer:", dataToSend);
 
     try {
-      const response = await fetch("http://localhost:5000/api/submit-form", {
+      const response = await fetch("https://centre-polyvalence.com/api/submit-form.php", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -116,9 +115,10 @@ const FormModal = ({ isOpen, onClose }) => {
       });
 
       if (!response.ok) {
+        console.log(response)
         throw new Error("Erreur lors de l'envoi des données");
       }
-
+      console.log(response)
       console.log("Formulaire soumis avec succès !");
       setSuccessMessage("Formulaire soumis avec succès !");
       setErrorMessage("");
