@@ -30,22 +30,22 @@ import * as yup from "yup";
 const FormModal = ({ isOpen, onClose }) => {
 
   const initialValues = {
-    Nom: "",
-    Email: "",
-    Adresse: "",
-    'Numéro de téléphone': "",
-    firstSelect: "",
-    secondSelect: "",
-    courseType: "Présentiel",
+    nom: "",
+    email: "",
+    adresse: "",
+    tel: "",
+    category: "",
+    module: "",
+    type: "Présentiel",
   };
 
 
-  const [firstSelectValue, setFirstSelectValue] = useState('');
-  const [secondSelectOptions, setSecondSelectOptions] = useState([]);
+  const [categoryValue, setCategoryValue] = useState('');
+  const [moduleOptions, setModuleOptions] = useState([]);
 
   const options = {
-    firstSelect: ['Langues', 'Collége', 'Tronc commun', 'Bac', 'Universitaire', 'Concours'],
-    secondSelect: {
+    category: ['Langues', 'Collége', 'Tronc commun', 'Bac', 'Universitaire', 'Concours'],
+    module: {
       Langues: ["Français", "Anglais", "Espagnol"],
       Collége: ['1ere année', '2éme année', '3éme année'],
       'Tronc commun': ['Sciences', 'Lettres et sciences humaines'],
@@ -55,11 +55,11 @@ const FormModal = ({ isOpen, onClose }) => {
     },
   };
 
-  // const handleFirstSelectChange = (event) => {
+  // const handleCategoryChange = (event) => {
   //   console.log(event)
   //   const value = event.target.value;
-  //   setFirstSelectValue(value);
-  //   setSecondSelectOptions(options.secondSelect[value] || []);
+  //   setCategoryValue(value);
+  //   setModuleOptions(options.module[value] || []);
   // };
 
   const [errors, setErrors] = useState({});
@@ -68,66 +68,66 @@ const FormModal = ({ isOpen, onClose }) => {
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
 
   const validationSchema = yup.object({
-    Nom: yup.string().required("Ce champ est requis"),
-    Email: yup
+    nom: yup.string().required("Ce champ est requis"),
+    email: yup
       .string()
       .email("Format d'email invalide")
       .required("Ce champ est requis"),
-    Adresse: yup.string().required("Ce champ est requis"),
-    'Numéro de téléphone': yup
+    adresse: yup.string().required("Ce champ est requis"),
+    tel: yup
       .string()
       .matches(/^0\d{9}$/, "Ex: 0612345678")
       .required("Ce champ est requis"),
-    courseType: yup.string().required("Ce champ est requis"),
-
-    firstSelect: yup
+    category: yup
       .string()
       .oneOf(["Langues", "Collége", "Tronc commun", "Bac", "Universitaire", "Concours"], "Option invalide")
       .required("Ce champ est requis"),
-
-    secondSelect: yup
+    module: yup
       .string()
       .oneOf(["Français", "Anglais", "Espagnol", "1ere année", "2éme année", "3éme année", 'Sciences', 'Lettres et sciences humaines', 'Economique 1ere année', 'Economique 2éme année', 'Scientifique 1ere année', 'Scientifique 2éme année', 'Economique Semestre 1', 'Economique Semestre 2', 'Economique Semestre 3', 'Economique Semestre 4', 'Economique Semestre 5', 'Economique Semestre 6', 'CCA / GFCF / Ingénieurs Comptable / Financière et Fiscale / Sciences de Gestion', 'Management des ressources humaines / GRF'], "Option invalide")
       .required("Ce champ est requis"),
+
+    type: yup.string().required("Ce champ est requis"),
 
   });
 
   const handleSubmit = async (values, { setSubmitting }) => {
     const dataToSend = {
-      Nom: values.Nom,
-      Email: values.Email,
-      Adresse: values.Adresse,
-      'Numéro de téléphone': values['Numéro de téléphone'],
-      secondSelect: values.secondSelect,
-      courseType: values.courseType,
+      nom: values.nom,
+      email: values.email,
+      adresse: values.adresse,
+      tel: values.tel,
+      category: values.category,
+      module: values.module,
+      type: values.type
     };
 
     // Vérifier les données avant d'envoyer
     console.log("Données à envoyer:", dataToSend);
+    console.log("Données à envoyer:", JSON.stringify(dataToSend));
 
-    try {
-      const response = await fetch("https://centre-polyvalence.com/api/submit-form.php", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(dataToSend),
-      });
+    const response = await fetch("http://localhost/api/submit-form.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dataToSend),
+    });
 
-      if (!response.ok) {
-        console.log(response)
-        throw new Error("Erreur lors de l'envoi des données");
-      }
-      console.log(response)
+    const responseData = await response.json();
+
+    if (!response.ok) {
+      console.error("Erreur d'envoi :", responseData);
+      console.log("Logs from backend:", responseData.logs); // Log backend logs
+      setErrorMessage(`Erreur: ${responseData.message} (Code: ${responseData.error_code})`);
+      setSuccessMessage("");
+    }
+    else if (response.ok) {
       console.log("Formulaire soumis avec succès !");
+      console.log("Logs from backend:", responseData.logs); // Log backend logs
       setSuccessMessage("Formulaire soumis avec succès !");
       setErrorMessage("");
-      onClose(); // Close the form modal
       setShowSuccessDialog(true); // Show the success dialog
-    } catch (error) {
-      console.error("Erreur d'envoi :", error);
-      setErrorMessage("Erreur lors de l'envoi des données");
-      setSuccessMessage("");
     }
 
     setSubmitting(false);
@@ -181,17 +181,17 @@ const FormModal = ({ isOpen, onClose }) => {
                     <TextField
                       required
                       margin="dense"
-                      id="Nom"
-                      name="Nom"
+                      id="nom"
+                      name="nom"
                       label="Nom & Prénom"
                       type="text"
                       fullWidth
                       variant="standard"
                       onBlur={handleBlur}
                       onChange={handleChange}
-                      value={values.Nom}
-                      error={!!touched.Nom && Boolean(errors.Nom)}
-                      helperText={touched.Nom && errors.Nom}
+                      value={values.nom}
+                      error={!!touched.nom && Boolean(errors.nom)}
+                      helperText={touched.nom && errors.nom}
                     />
                   </Grid>
 
@@ -199,17 +199,17 @@ const FormModal = ({ isOpen, onClose }) => {
                     <TextField
                       required
                       margin="dense"
-                      id="Numéro de téléphone"  // Changer de "telephone" à "Numéro de téléphone"
-                      name="Numéro de téléphone" // Le même nom que dans la validation yup
+                      id="tel"  // Changer de "telephone" à "Numéro de téléphone"
+                      name="tel" // Le même nom que dans la validation yup
                       label="Numéro de téléphone"
                       type="telephone"
                       fullWidth
                       variant="standard"
                       onBlur={handleBlur}
                       onChange={handleChange}
-                      value={values['Numéro de téléphone']}
-                      error={!!touched['Numéro de téléphone'] && Boolean(errors['Numéro de téléphone'])}
-                      helperText={touched['Numéro de téléphone'] && errors['Numéro de téléphone']}
+                      value={values.tel}
+                      error={!!touched.tel && Boolean(errors.tel)}
+                      helperText={touched.tel && errors.tel}
                     />
                   </Grid>
 
@@ -217,17 +217,17 @@ const FormModal = ({ isOpen, onClose }) => {
                     <TextField
                       required
                       margin="dense"
-                      id="Adresse"
-                      name="Adresse"
+                      id="adresse"
+                      name="adresse"
                       label="Adresse"
                       type="text"
                       fullWidth
                       variant="standard"
                       onBlur={handleBlur}
                       onChange={handleChange}
-                      value={values.Adresse}
-                      error={!!touched.Adresse && Boolean(errors.Adresse)}
-                      helperText={touched.Adresse && errors.Adresse}
+                      value={values.adresse}
+                      error={!!touched.adresse && Boolean(errors.adresse)}
+                      helperText={touched.adresse && errors.adresse}
                     />
                   </Grid>
 
@@ -235,17 +235,17 @@ const FormModal = ({ isOpen, onClose }) => {
                     <TextField
                       required
                       margin="dense"
-                      id="Email"
-                      name="Email"
+                      id="email"
+                      name="email"
                       label="Email"
                       type="email"
                       fullWidth
                       variant="standard"
                       onBlur={handleBlur}
                       onChange={handleChange}
-                      value={values.Email}
-                      error={!!touched.Email && Boolean(errors.Email)}
-                      helperText={touched.Email && errors.Email}
+                      value={values.email}
+                      error={!!touched.email && Boolean(errors.email)}
+                      helperText={touched.email && errors.email}
                     />
                   </Grid>
 
@@ -254,31 +254,31 @@ const FormModal = ({ isOpen, onClose }) => {
                       <InputLabel id="first-select-label">First Select</InputLabel>
                       <Select
                         labelId="first-select-label"
-                        id="firstSelect"
-                        name="firstSelect"
-                        value={firstSelectValue}
+                        id="category"
+                        name="category"
+                        value={categoryValue}
                         onChange={(event) => {
                           handleChange(event);
-                          //handleFirstSelectChange(event);
+                          //handleCategoryChange(event);
                           console.log(event)
                           const value = event.target.value;
-                          setFirstSelectValue(value);
-                          setSecondSelectOptions(options.secondSelect[value] || []);
-                          setFieldValue('secondSelect', '')
+                          setCategoryValue(value);
+                          setModuleOptions(options.module[value] || []);
+                          setFieldValue('module', '')
                         }}
                         onBlur={handleBlur}
                         label="First Select"
-                        error={!!touched.firstSelect && Boolean(errors.firstSelect)}
+                        error={!!touched.category && Boolean(errors.category)}
                       >
 
-                        {options.firstSelect.map((option) => (
+                        {options.category.map((option) => (
                           <MenuItem key={option} value={option}>
                             {option}
                           </MenuItem>
                         ))}
                       </Select>
-                      {!!touched.firstSelect && Boolean(errors.firstSelect) && (
-                        <FormHelperText error>{touched.firstSelect && errors.firstSelect}</FormHelperText>
+                      {!!touched.category && Boolean(errors.category) && (
+                        <FormHelperText error>{touched.category && errors.category}</FormHelperText>
                       )}
                     </FormControl>
                   </Grid>
@@ -288,22 +288,22 @@ const FormModal = ({ isOpen, onClose }) => {
                       <InputLabel id="second-select-label">Second Select</InputLabel>
                       <Select
                         labelId="second-select-label"
-                        id="secondSelect"
-                        name="secondSelect"
-                        value={values.secondSelect}
+                        id="module"
+                        name="module"
+                        value={values.module}
                         onChange={handleChange}
                         onBlur={handleBlur}
                         label="Second Select"
-                        error={!!touched.secondSelect && Boolean(errors.secondSelect)}
+                        error={!!touched.module && Boolean(errors.module)}
                       >
-                        {secondSelectOptions.map((option) => (
+                        {moduleOptions.map((option) => (
                           <MenuItem key={option} value={option}>
                             {option}
                           </MenuItem>
                         ))}
                       </Select>
-                      {!!touched.secondSelect && Boolean(errors.secondSelect) && (
-                        <FormHelperText error>{touched.secondSelect && errors.secondSelect}</FormHelperText>
+                      {!!touched.module && Boolean(errors.module) && (
+                        <FormHelperText error>{touched.module && errors.module}</FormHelperText>
                       )}
                     </FormControl>
                   </Grid>
@@ -313,8 +313,8 @@ const FormModal = ({ isOpen, onClose }) => {
                       Déroulement des cours :
                     </Typography>
                     <RadioGroup
-                      name="courseType"
-                      value={values.courseType}
+                      name="type"
+                      value={values.type}
                       onChange={handleChange}
                     >
                       <FormControlLabel

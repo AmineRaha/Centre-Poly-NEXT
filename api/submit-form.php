@@ -1,13 +1,14 @@
 <?php
-
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: http://localhost:3000"); // Allow requests from your React app
 header("Access-Control-Allow-Methods: POST, OPTIONS"); // Allow POST and OPTIONS methods
 header("Access-Control-Allow-Headers: Content-Type"); // Allow Content-Type header
+
+ini_set('display_errors',1 );
+ini_set('display_startup_errors', 1);
+ini_set('error_log', __DIR__.'/php-error.log');
+error_reporting();
+
+header("Content-Type: application/json");
 
 // Handle preflight requests (OPTIONS method)
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -16,10 +17,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 // Database connection
+
 $host = "srv1690.hstgr.io";
 $user = "u764592832_poly_admin";
-$password = "0[Ydlkguavy";
+$password = "Centrepolydb&23";
 $database = "u764592832_centre_poly";
+
+// $host = "localhost";
+// $user = "root";
+// $password = "";
+// $database = "centre_poly";
 
 $conn = new mysqli($host, $user, $password, $database);
 
@@ -33,34 +40,53 @@ if ($conn->connect_error) {
 $data = json_decode(file_get_contents("php://input"), true);
 
 if (
-    empty($data['Nom']) || empty($data['Email']) || empty($data['Adresse']) ||
-    empty($data['Numéro de téléphone'])|| empty($data['secondSelect']) || empty($data['courseType'])
+    empty($data['nom']) || empty($data['email']) || empty($data['adresse']) ||
+    empty($data['tel']) || empty($data['category']) || empty($data['module']) || empty($data['type'])
 ) {
     http_response_code(400);
     echo json_encode(["message" => "Tous les champs sont requis !"]);
     exit();
 }
 
-$Nom = $conn->real_escape_string($data['Nom']);
-$Email = $conn->real_escape_string($data['Email']);
-$Adresse = $conn->real_escape_string($data['Adresse']);
-$phone = $conn->real_escape_string($data['Numéro de téléphone']);
-$secondSelect = $conn->real_escape_string($data['secondSelect']);
-$courseType = $conn->real_escape_string($data['courseType']);
+$nom = $conn->real_escape_string($data['nom']);
+$email = $conn->real_escape_string($data['email']);
+$adresse = $conn->real_escape_string($data['adresse']);
+$tel = $conn->real_escape_string($data['tel']);
+$category = $conn->real_escape_string($data['category']);
+$module = $conn->real_escape_string($data['module']);
+$type = $conn->real_escape_string($data['type']);
+$date = date('Y-m-d H:i:s'); // Automatically set the current date and time
 
 // Insert data into the database
-$query = "INSERT INTO data_form (Nom, Email, Adresse, `Numéro de téléphone`, secondSelect, courseType) 
-          VALUES ('$Nom', '$Email', '$Adresse', '$phone', '$secondSelect', '$courseType')";
+$query = "INSERT INTO form_select (nom, email, adresse, tel, category, module, type, date) 
+          VALUES ('$nom', '$email', '$adresse', '$tel', '$category', '$module', '$type', '$date')";
 
 error_log("SQL Query: " . $query);
 
-if ($conn->query($query) === TRUE) {
-    http_response_code(200);
-    echo json_encode(["message" => "Formulaire soumis avec succès !"]);
-} else {
-  error_log("SQL Error: " . $conn->error);
+try {
+    if ($conn->query($query) === TRUE) {
+        http_response_code(200);
+        echo json_encode([
+            "message" => "Formulaire soumis avec succès !",
+            "error_code" => 0,
+        ]);
+    } else {
+        // Handle any SQL error
+        error_log("SQL Error: " . $conn->error);
+        http_response_code(500);
+        echo json_encode([
+            "message" => "Erreur lors de l'insertion des données: " . $conn->error,
+            "error_code" => $conn->errno,
+        ]);
+    }
+} catch (Exception $e) {
+    // Catch unexpected exceptions
+    error_log("Exception: " . $e->getMessage());
     http_response_code(500);
-    echo json_encode(["message" => "Erreur lors de l'insertion des données: " . $conn->error]);
+    echo json_encode([
+        "message" => $e->getMessage(),
+        "error_code" => 1000,
+    ]);
 }
 
 $conn->close();
