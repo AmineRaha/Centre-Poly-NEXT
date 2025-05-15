@@ -77,12 +77,10 @@ const Navbar = ({ onOpenModal }) => {
             <ListItemText primary="Acceuil" />
           </ListItemButton>
         )}
-        {/* <ListItemButton onClick={() => onOpenModal('FormModal')} sx={{ backgroundColor: 'black', textTransform: 'uppercase' }}>
+        <ListItemButton onClick={() => onOpenModal('FormModal')} sx={{ backgroundColor: 'black', textTransform: 'uppercase' }}>
           <ListItemText primary="Nous rejoindre" sx={{ color: 'white', fontWeight: 600 }} />
         </ListItemButton>
-        <ListItemButton onClick={() => onOpenModal('FormTextBox')} sx={listItemButtonStyle}>
-          <ListItemText primary="Open Form TextBox" />
-        </ListItemButton> */}
+
       </List>
     </Box>
   );
@@ -125,7 +123,6 @@ const Navbar = ({ onOpenModal }) => {
             <Button component={Link} href="/" sx={{ fontWeight: "700" }}>Acceuil</Button>
           )}
           <Button variant='contained' onClick={() => onOpenModal('FormModal')} sx={{ fontWeight: "700", marginLeft: isHomePage ? "" : "auto" }}>Nous rejoindre</Button>
-          <Button onClick={() => onOpenModal('FormTextBox')}>Open Form TextBox</Button>
         </Box>
         <Box sx={{ display: { xs: "flex", md: "none" }, zIndex: 2 }}>
           <IconButton

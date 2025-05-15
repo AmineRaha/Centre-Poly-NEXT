@@ -30,6 +30,7 @@ import * as yup from "yup";
 const FormModal = ({ isOpen, onClose }) => {
 
   const initialValues = {
+
     nom: "",
     email: "",
     adresse: "",
@@ -93,6 +94,7 @@ const FormModal = ({ isOpen, onClose }) => {
 
   const handleSubmit = async (values, { setSubmitting }) => {
     const dataToSend = {
+      form_id: 'select-form',
       nom: values.nom,
       email: values.email,
       adresse: values.adresse,
@@ -104,7 +106,6 @@ const FormModal = ({ isOpen, onClose }) => {
 
     // Vérifier les données avant d'envoyer
     console.log("Données à envoyer:", dataToSend);
-    console.log("Données à envoyer:", JSON.stringify(dataToSend));
 
     const response = await fetch("http://localhost/api/submit-form.php", {
       method: "POST",
@@ -115,7 +116,7 @@ const FormModal = ({ isOpen, onClose }) => {
     });
 
     const responseData = await response.json();
-
+    console.log(responseData);
     if (!response.ok) {
       console.error("Erreur d'envoi :", responseData);
       console.log("Logs from backend:", responseData.logs); // Log backend logs
@@ -123,7 +124,6 @@ const FormModal = ({ isOpen, onClose }) => {
       setSuccessMessage("");
     }
     else if (response.ok) {
-      console.log("Formulaire soumis avec succès !");
       console.log("Logs from backend:", responseData.logs); // Log backend logs
       setSuccessMessage("Formulaire soumis avec succès !");
       setErrorMessage("");
@@ -162,7 +162,6 @@ const FormModal = ({ isOpen, onClose }) => {
             values,
             errors,
             touched,
-
             handleBlur,
             handleChange,
             handleSubmit,
@@ -199,8 +198,8 @@ const FormModal = ({ isOpen, onClose }) => {
                     <TextField
                       required
                       margin="dense"
-                      id="tel"  // Changer de "telephone" à "Numéro de téléphone"
-                      name="tel" // Le même nom que dans la validation yup
+                      id="tel"
+                      name="tel"
                       label="Numéro de téléphone"
                       type="telephone"
                       fullWidth
@@ -251,7 +250,7 @@ const FormModal = ({ isOpen, onClose }) => {
 
                   <Grid item xs={12} sm={6}>
                     <FormControl fullWidth margin="dense" variant="standard">
-                      <InputLabel id="first-select-label">First Select</InputLabel>
+                      <InputLabel id="first-select-label">Category</InputLabel>
                       <Select
                         labelId="first-select-label"
                         id="category"
@@ -267,7 +266,7 @@ const FormModal = ({ isOpen, onClose }) => {
                           setFieldValue('module', '')
                         }}
                         onBlur={handleBlur}
-                        label="First Select"
+                        label="Category"
                         error={!!touched.category && Boolean(errors.category)}
                       >
 
@@ -285,7 +284,7 @@ const FormModal = ({ isOpen, onClose }) => {
 
                   <Grid item xs={12} sm={6}>
                     <FormControl fullWidth margin="dense" variant="standard">
-                      <InputLabel id="second-select-label">Second Select</InputLabel>
+                      <InputLabel id="second-select-label">Module</InputLabel>
                       <Select
                         labelId="second-select-label"
                         id="module"
@@ -293,7 +292,7 @@ const FormModal = ({ isOpen, onClose }) => {
                         value={values.module}
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        label="Second Select"
+                        label="Module"
                         error={!!touched.module && Boolean(errors.module)}
                       >
                         {moduleOptions.map((option) => (
@@ -329,6 +328,7 @@ const FormModal = ({ isOpen, onClose }) => {
                       />
                     </RadioGroup>
                   </Grid>
+
                 </Grid>
               </DialogContent>
               <DialogActions>

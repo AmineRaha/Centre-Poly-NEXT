@@ -37,7 +37,7 @@ app.post("/api/submit-form", async (req, res) => {
         return res.status(500).json({ message: "Erreur interne du serveur" });
       }
       
-      res.status(200).json({ message: "Formulaire soumis avec succès !" });
+      res.status(200).json({ message: "Formulaire soumis avec succèssss !" });
     });
 
   } catch (error) {

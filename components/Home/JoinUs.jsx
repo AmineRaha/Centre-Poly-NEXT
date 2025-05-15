@@ -1,7 +1,7 @@
 import { Box, Button, Stack, Typography, useTheme } from '@mui/material'
 import { tokens } from '../../styles/theme';
 
-const JoinUs = ({onOpenModal}) => {
+const JoinUs = ({ onOpenModal }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   return (
@@ -10,7 +10,7 @@ const JoinUs = ({onOpenModal}) => {
         <Typography variant='h2' sx={{ color: "white", fontWeight: "600", textAlign: "center" }}>
           Nous vous invitons à nous contacter pour plus d'informations sur nos programmes.
         </Typography>
-        {/* <Button variant='text' onClick={onOpenModal}
+        <Button variant='text' onClick={() => onOpenModal('FormTextBox')}
           sx={{
             textAlign: "center",
             color: "primary.main",
@@ -30,8 +30,8 @@ const JoinUs = ({onOpenModal}) => {
             }
           }}
         >
-          Nous rejoindre
-        </Button> */}
+          Envoyez-nous un message
+        </Button>
 
       </Stack>
     </Box>

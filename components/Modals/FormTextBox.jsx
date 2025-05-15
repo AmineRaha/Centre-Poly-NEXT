@@ -17,11 +17,12 @@ import * as yup from "yup";
 const FormTextBox = ({ isOpen, onClose }) => {
 
   const initialValues = {
-    Nom: "",
-    Email: "",
-    Adresse: "",
-    'Numéro de téléphone': "",
-    Text: "",
+    form_id: "text-form",
+    nom: "",
+    email: "",
+    adresse: "",
+    tel: "",
+    text: "",
   };
 
 
@@ -31,54 +32,54 @@ const FormTextBox = ({ isOpen, onClose }) => {
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
 
   const validationSchema = yup.object({
-    Nom: yup.string().required("Ce champ est requis"),
-    Email: yup
+    nom: yup.string().required("Ce champ est requis"),
+    email: yup
       .string()
       .email("Format d'email invalide")
       .required("Ce champ est requis"),
-    Adresse: yup.string().required("Ce champ est requis"),
-    'Numéro de téléphone': yup
+    adresse: yup.string().required("Ce champ est requis"),
+    tel: yup
       .string()
       .matches(/^0\d{9}$/, "Ex: 0612345678")
       .required("Ce champ est requis"),
 
-    Text: yup.string().required("Ce champ est requis"),
+    text: yup.string().required("Ce champ est requis"),
 
   });
 
   const handleSubmit = async (values, { setSubmitting }) => {
     const dataToSend = {
-      Nom: values.Nom,
-      Email: values.Email,
-      Adresse: values.Adresse,
-      'Numéro de téléphone': values['Numéro de téléphone'],
-      Text: values.Text,
+      form_id: 'text-form',
+      nom: values.nom,
+      email: values.email,
+      adresse: values.adresse,
+      tel: values.tel,
+      text: values.text,
     };
 
     // Vérifier les données avant d'envoyer
     console.log("Données à envoyer:", dataToSend);
 
-    try {
-      const response = await fetch("http://localhost:5000/api/submit-form", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(dataToSend),
-      });
+    const response = await fetch("http://localhost/api/submit-form.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dataToSend),
+    });
 
-      if (!response.ok) {
-        throw new Error("Erreur lors de l'envoi des données");
-      }
+    const responseData = await response.json();
 
-      console.log("Formulaire soumis avec succès !");
+    if (response.ok) {
+      console.log("Logs from backend:", responseData.logs); // Log backend logs
       setSuccessMessage("Formulaire soumis avec succès !");
       setErrorMessage("");
-      onClose(); // Close the form modal
       setShowSuccessDialog(true); // Show the success dialog
-    } catch (error) {
-      console.error("Erreur d'envoi :", error);
-      setErrorMessage("Erreur lors de l'envoi des données");
+    }
+    else if (!response.ok) {
+      console.error("Erreur d'envoi :", responseData);
+      console.log("Logs from backend:", responseData.logs); // Log backend logs
+      setErrorMessage(`Erreur: ${responseData.message} (Code: ${responseData.error_code})`);
       setSuccessMessage("");
     }
 
@@ -99,7 +100,7 @@ const FormTextBox = ({ isOpen, onClose }) => {
           color="white"
           sx={{ backgroundColor: "#eb7a37", textTransform: "uppercase" }}
         >
-          Envoyez un message
+          Envoyez un méssage
         </DialogTitle>
 
         <Formik
@@ -131,17 +132,17 @@ const FormTextBox = ({ isOpen, onClose }) => {
                     <TextField
                       required
                       margin="dense"
-                      id="Nom"
-                      name="Nom"
+                      id="nom"
+                      name="nom"
                       label="Nom & Prénom"
                       type="text"
                       fullWidth
                       variant="standard"
                       onBlur={handleBlur}
                       onChange={handleChange}
-                      value={values.Nom}
-                      error={!!touched.Nom && Boolean(errors.Nom)}
-                      helperText={touched.Nom && errors.Nom}
+                      value={values.nom}
+                      error={!!touched.nom && Boolean(errors.nom)}
+                      helperText={touched.nom && errors.nom}
                     />
                   </Grid>
 
@@ -149,17 +150,17 @@ const FormTextBox = ({ isOpen, onClose }) => {
                     <TextField
                       required
                       margin="dense"
-                      id="Numéro de téléphone"  // Changer de "telephone" à "Numéro de téléphone"
-                      name="Numéro de téléphone" // Le même nom que dans la validation yup
+                      id="tel"
+                      name="tel"
                       label="Numéro de téléphone"
                       type="telephone"
                       fullWidth
                       variant="standard"
                       onBlur={handleBlur}
                       onChange={handleChange}
-                      value={values['Numéro de téléphone']}
-                      error={!!touched['Numéro de téléphone'] && Boolean(errors['Numéro de téléphone'])}
-                      helperText={touched['Numéro de téléphone'] && errors['Numéro de téléphone']}
+                      value={values.tel}
+                      error={!!touched.tel && Boolean(errors.tel)}
+                      helperText={touched.tel && errors.tel}
                     />
                   </Grid>
 
@@ -167,17 +168,17 @@ const FormTextBox = ({ isOpen, onClose }) => {
                     <TextField
                       required
                       margin="dense"
-                      id="Adresse"
-                      name="Adresse"
+                      id="adresse"
+                      name="adresse"
                       label="Adresse"
                       type="text"
                       fullWidth
                       variant="standard"
                       onBlur={handleBlur}
                       onChange={handleChange}
-                      value={values.Adresse}
-                      error={!!touched.Adresse && Boolean(errors.Adresse)}
-                      helperText={touched.Adresse && errors.Adresse}
+                      value={values.adresse}
+                      error={!!touched.adresse && Boolean(errors.adresse)}
+                      helperText={touched.adresse && errors.adresse}
                     />
                   </Grid>
 
@@ -185,17 +186,17 @@ const FormTextBox = ({ isOpen, onClose }) => {
                     <TextField
                       required
                       margin="dense"
-                      id="Email"
-                      name="Email"
+                      id="email"
+                      name="email"
                       label="Email"
                       type="email"
                       fullWidth
                       variant="standard"
                       onBlur={handleBlur}
                       onChange={handleChange}
-                      value={values.Email}
-                      error={!!touched.Email && Boolean(errors.Email)}
-                      helperText={touched.Email && errors.Email}
+                      value={values.email}
+                      error={!!touched.email && Boolean(errors.email)}
+                      helperText={touched.email && errors.email}
                     />
                   </Grid>
 
@@ -203,9 +204,9 @@ const FormTextBox = ({ isOpen, onClose }) => {
                     <TextField
                       required
                       margin="dense"
-                      id="Text"
-                      name="Text"
-                      label="Text"
+                      id="text"
+                      name="text"
+                      label="Votre méssage"
                       type="text"
                       multiline
                       rows={4}
@@ -213,11 +214,12 @@ const FormTextBox = ({ isOpen, onClose }) => {
                       variant="standard"
                       onBlur={handleBlur}
                       onChange={handleChange}
-                      value={values.Text}
-                      error={!!touched.Text && Boolean(errors.Text)}
-                      helperText={touched.Text && errors.Text}
+                      value={values.text}
+                      error={!!touched.text && Boolean(errors.text)}
+                      helperText={touched.text && errors.text}
                     />
                   </Grid>
+
                 </Grid>
               </DialogContent>
               <DialogActions>
