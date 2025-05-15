@@ -57,7 +57,7 @@ const FormModal = ({ isOpen, onClose }) => {
   };
 
   // const handleCategoryChange = (event) => {
-  //   console.log(event)
+  //   //console.log(event)
   //   const value = event.target.value;
   //   setCategoryValue(value);
   //   setModuleOptions(options.module[value] || []);
@@ -105,9 +105,9 @@ const FormModal = ({ isOpen, onClose }) => {
     };
 
     // Vérifier les données avant d'envoyer
-    console.log("Données à envoyer:", dataToSend);
+    //console.log("Données à envoyer:", dataToSend);
 
-    const response = await fetch("http://localhost/api/submit-form.php", {
+    const response = await fetch("https://centre-polyvalence.com/api/submit-form.php", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -116,15 +116,15 @@ const FormModal = ({ isOpen, onClose }) => {
     });
 
     const responseData = await response.json();
-    console.log(responseData);
+    //console.log(responseData);
     if (!response.ok) {
       console.error("Erreur d'envoi :", responseData);
-      console.log("Logs from backend:", responseData.logs); // Log backend logs
+      //console.log("Logs from backend:", responseData.logs); // Log backend logs
       setErrorMessage(`Erreur: ${responseData.message} (Code: ${responseData.error_code})`);
       setSuccessMessage("");
     }
     else if (response.ok) {
-      console.log("Logs from backend:", responseData.logs); // Log backend logs
+      //console.log("Logs from backend:", responseData.logs); // Log backend logs
       setSuccessMessage("Formulaire soumis avec succès !");
       setErrorMessage("");
       setShowSuccessDialog(true); // Show the success dialog
@@ -168,7 +168,6 @@ const FormModal = ({ isOpen, onClose }) => {
             setFieldValue
           }) => (
             <form onSubmit={handleSubmit}>
-              {console.log(errors)}
               <DialogContent>
                 <DialogContentText>
                   Veuillez tapez vos informations
@@ -259,7 +258,7 @@ const FormModal = ({ isOpen, onClose }) => {
                         onChange={(event) => {
                           handleChange(event);
                           //handleCategoryChange(event);
-                          console.log(event)
+                          //console.log(event)
                           const value = event.target.value;
                           setCategoryValue(value);
                           setModuleOptions(options.module[value] || []);

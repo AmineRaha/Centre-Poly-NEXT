@@ -58,9 +58,9 @@ const FormTextBox = ({ isOpen, onClose }) => {
     };
 
     // Vérifier les données avant d'envoyer
-    console.log("Données à envoyer:", dataToSend);
+    //console.log("Données à envoyer:", dataToSend);
 
-    const response = await fetch("http://localhost/api/submit-form.php", {
+    const response = await fetch("https://centre-polyvalence.com/api/submit-form.php", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -71,14 +71,14 @@ const FormTextBox = ({ isOpen, onClose }) => {
     const responseData = await response.json();
 
     if (response.ok) {
-      console.log("Logs from backend:", responseData.logs); // Log backend logs
+      //console.log("Logs from backend:", responseData.logs); // Log backend logs
       setSuccessMessage("Formulaire soumis avec succès !");
       setErrorMessage("");
       setShowSuccessDialog(true); // Show the success dialog
     }
     else if (!response.ok) {
       console.error("Erreur d'envoi :", responseData);
-      console.log("Logs from backend:", responseData.logs); // Log backend logs
+      //console.log("Logs from backend:", responseData.logs); // Log backend logs
       setErrorMessage(`Erreur: ${responseData.message} (Code: ${responseData.error_code})`);
       setSuccessMessage("");
     }
@@ -120,7 +120,6 @@ const FormTextBox = ({ isOpen, onClose }) => {
             handleSubmit,
           }) => (
             <form onSubmit={handleSubmit}>
-              {console.log(errors)}
               <DialogContent>
                 <DialogContentText>
                   Veuillez tapez vos informations
