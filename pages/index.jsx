@@ -16,7 +16,7 @@ export function HomeContent({ onOpenModal }) {
     <>
       <Head>
         <Link rel="icon" href="/favicon.ico" />
-        <title>Page d'acceuil</title>
+        <title>Centre Polyvalence - Page d'acceuil</title>
         <meta name="description" content="Bienvenue au centre polyvanlence" />
       </Head>
       <Welcome />

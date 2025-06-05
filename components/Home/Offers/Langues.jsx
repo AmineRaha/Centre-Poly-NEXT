@@ -190,7 +190,7 @@ const Langues = ({ onOpenModal }) => {
           </Grid>
         ))}
       </Grid>
-
+{/* 
       <Stack gap={1} component={motion.div}
         variants={childElementVariants}
         sx={{
@@ -205,7 +205,7 @@ const Langues = ({ onOpenModal }) => {
             En savoir plus
           </Button>
         </Link>
-      </Stack>
+      </Stack> */}
     </motion.div >
   );
 };
