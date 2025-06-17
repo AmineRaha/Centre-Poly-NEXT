@@ -46,8 +46,8 @@ const Offres2 = ({ onOpenModal }) => {
 
           <Stack direction={"row"} justifyContent={"center"} alignItems={"center"} columnGap={1} flexWrap={"wrap"} rowGap={"10px"} >
             <FilterButton tag="langues" text="Langues" handleFilterClick={handleFilterClick} selectedFilter={selectedFilter} />
-            <FilterButton tag="col" text="Collége" handleFilterClick={handleFilterClick} selectedFilter={selectedFilter} />
-            <FilterButton tag="tc" text="Tronc commun" handleFilterClick={handleFilterClick} selectedFilter={selectedFilter} />
+            {/* <FilterButton tag="col" text="Collége" handleFilterClick={handleFilterClick} selectedFilter={selectedFilter} /> */}
+            {/* <FilterButton tag="tc" text="Tronc commun" handleFilterClick={handleFilterClick} selectedFilter={selectedFilter} /> */}
             <FilterButton tag="bac" text="BAC" handleFilterClick={handleFilterClick} selectedFilter={selectedFilter} />
             <FilterButton tag="universitaire" text="Universitaire" handleFilterClick={handleFilterClick} selectedFilter={selectedFilter} />
             <FilterButton tag="concours" text="Concours" handleFilterClick={handleFilterClick} selectedFilter={selectedFilter} />

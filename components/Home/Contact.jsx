@@ -16,6 +16,7 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import { FaTiktok } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { AdvancedMarker, APIProvider, Map } from "@vis.gl/react-google-maps";
 
@@ -359,6 +360,8 @@ const Contact = () => {
                   >
                     <Link
                       href="https://www.facebook.com/profile.php?id=100090992540508"
+                      component="a"
+                      target="_blank"
                       passHref
                     >
                       <IconButton sx={{ padding: 0 }}>
@@ -369,6 +372,8 @@ const Contact = () => {
                     </Link>
                     <Link
                       href="https://www.linkedin.com/company/centre-polyvalence/"
+                      component="a"
+                      target="_blank"
                       passHref
                     >
                       <IconButton sx={{ padding: 0 }}>
@@ -379,6 +384,8 @@ const Contact = () => {
                     </Link>
                     <Link
                       href="https://www.instagram.com/centrepolyvalence/"
+                      component="a"
+                      target="_blank"
                       passHref
                     >
                       <IconButton sx={{ padding: 0 }}>
@@ -387,11 +394,21 @@ const Contact = () => {
                         />
                       </IconButton>
                     </Link>
-                    <Link href="https://wa.me/+212653422077" passHref>
+                    <Link href="https://wa.me/+212653422077" target="_blank" passHref>
                       <IconButton sx={{ padding: 0 }}>
                         <WhatsAppIcon
                           sx={{ color: "white", fontSize: "70px" }}
                         />
+                      </IconButton>
+                    </Link>
+                    <Link
+                      href="https://www.tiktok.com/@centre.polyvalenc"
+                      component="a"
+                      target="_blank"
+                      passHref
+                    >
+                      <IconButton sx={{ padding: 0 }}>
+                        <FaTiktok style={{ color: "white", fontSize: "65px", paddingTop: '10px' }} />
                       </IconButton>
                     </Link>
                   </Stack>

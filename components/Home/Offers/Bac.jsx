@@ -6,7 +6,11 @@ import { useState } from "react";
 import FilterButton from "./FilterButton";
 import { motion } from "framer-motion";
 
-export async function getStaticProps() {
+
+const Bac = () => {
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+
   const list = [
     {
       eco: [
@@ -66,15 +70,6 @@ export async function getStaticProps() {
       ],
     },
   ];
-
-  return {
-    props: { list },
-  };
-}
-
-const Bac = ({ list }) => {
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
 
   const [selectedFilter, setSelectedFilter] = useState("eco");
 
